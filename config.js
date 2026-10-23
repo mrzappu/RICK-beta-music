@@ -31,30 +31,23 @@ module.exports = {
   errorLog: "", 
   nodes: [
     {
-      name: "Nazha",
-      password: "nazhafreelava",
-      host: "lavalink.nazha.online",
-      port: 443,
-      secure: true
-    },
-    {
-      name: "Strixnodes",
-      password: "glace",
-      host: "de-01.strixnodes.com",
-      port: 2010,
-      secure: false
-    },
-    {
-      name: "MilloHost",
+      name: "millohost_node",
       password: "https://discord.gg/mjS5J2K3ep",
       host: "lava-v4.millohost.my.id",
       port: 443,
       secure: true
     },
     {
-      name: "Serenetia",
-      password: "serenetia.com",
-      host: "lavalink.serenetia.com",
+      name: "serenetia_node",
+      password: "https://seretia.link/discord",
+      host: "lavalinkv4.serenetia.com",
+      port: 443,
+      secure: true
+    },
+    {
+      name: "Jirayu_node",
+      password: "youshallnotpass",
+      host: "lavalink.jirayu.net",
       port: 443,
       secure: true
     }
