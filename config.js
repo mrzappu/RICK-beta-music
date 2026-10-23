@@ -45,16 +45,9 @@ module.exports = {
       secure: true
     },
     {
-      name: "Serenetia-EU",
-      password: "BatuManaBisa",
-      host: "lavalinkv4-eu.serenetia.com",
-      port: 443,
-      secure: true
-    },
-    {
-      name: "Serenetia-ID",
-      password: "BatuManaBisa",
-      host: "lavalinkv4-id.serenetia.com",
+      name: "Serenetia-main",
+      password: "serenetia.com",
+      host: "lavalink.serenetia.com",
       port: 443,
       secure: true
     }
