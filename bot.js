@@ -105,7 +105,6 @@ const handleClientReady = () => {
     }
 };
 
-client.once("ready", handleClientReady);
 client.once("clientReady", handleClientReady);
 client.config = config;
 
@@ -115,7 +114,6 @@ fs.readdir("./events", (_err, files) => {
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0]; 
     if (eventName === "clientReady") {
-        client.on("ready", event.bind(null, client));
         client.on("clientReady", event.bind(null, client));
     } else {
         client.on(eventName, event.bind(null, client));

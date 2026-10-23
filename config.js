@@ -38,9 +38,9 @@ module.exports = {
       secure: false
     },
     {
-      name: "Nazha",
-      password: "nazhafreelava",
-      host: "lavalink.nazha.online",
+      name: "Serenetia",
+      password: "serenetia.com",
+      host: "lavalink.serenetia.com",
       port: 443,
       secure: true
     },
