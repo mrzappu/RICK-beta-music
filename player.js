@@ -519,6 +519,8 @@ async function initializePlayer(client) {
             client.statusManager.onTrackStart(player.guildId).catch(() => {});
         }
 
+        console.log(`${colors.cyan}[ MUSIC PLAYING ]${colors.reset} ${colors.green}"${track.info.title}" by ${track.info.author || 'Unknown'} • Node: ${player.node?.name || 'Default'} • Volume: ${player.volume || 100}%${colors.reset}`);
+
         const channel = client.channels.cache.get(player.textChannel);
         if (!channel) {
             const lang = getLangSync();
