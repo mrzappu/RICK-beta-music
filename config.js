@@ -31,6 +31,13 @@ module.exports = {
   errorLog: "", 
   nodes: [
     {
+      name: "Nazha",
+      password: "nazhafreelava",
+      host: "lavalink.nazha.online",
+      port: 443,
+      secure: true
+    },
+    {
       name: "Strixnodes",
       password: "glace",
       host: "de-01.strixnodes.com",
@@ -38,16 +45,16 @@ module.exports = {
       secure: false
     },
     {
-      name: "Serenetia",
-      password: "serenetia.com",
-      host: "lavalink.serenetia.com",
+      name: "MilloHost",
+      password: "https://discord.gg/mjS5J2K3ep",
+      host: "lava-v4.millohost.my.id",
       port: 443,
       secure: true
     },
     {
-      name: "MilloHost",
-      password: "https://discord.gg/mjS5J2K3ep",
-      host: "lava-v4.millohost.my.id",
+      name: "Serenetia",
+      password: "serenetia.com",
+      host: "lavalink.serenetia.com",
       port: 443,
       secure: true
     }

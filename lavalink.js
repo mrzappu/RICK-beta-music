@@ -1,7 +1,35 @@
-const { Riffy, Player } = require("riffy");
+const { Riffy, Player, Node } = require("riffy");
+const WebSocket = require("ws");
 const config = require("./config.js");
 const colors = require('./UI/colors/colors');
 const axios = require('axios');
+
+// Add User-Agent header to Riffy WebSocket connection to prevent Cloudflare 403 blocks (e.g. Nazha on Render)
+if (Node && Node.prototype.connect) {
+    Node.prototype.connect = async function() {
+        if (this.ws) this.ws.close();
+        this.riffy.emit("debug", `[Node (${this.name})] Connecting to the Node (Opening WebSocket Connection)`);
+
+        const headers = {
+            "Authorization": this.password,
+            "User-Id": this.riffy.clientId,
+            "Client-Name": `Riffy/${this.riffy.version}`,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        };
+
+        if (this.restVersion === "v4") {
+            if (this.sessionId) headers["Session-Id"] = this.sessionId;
+        } else {
+            if (this.resumeKey) headers["Resume-Key"] = this.resumeKey;
+        }
+
+        this.ws = new WebSocket(this.wsUrl, { headers });
+        this.ws.on("open", this.open.bind(this));
+        this.ws.on("error", this.error.bind(this));
+        this.ws.on("message", this.message.bind(this));
+        this.ws.on("close", this.close.bind(this));
+    };
+}
 
 // Polyfill missing Player.prototype.restart in Riffy (fixes autoResume on node reconnect)
 if (Player && !Player.prototype.restart) {
