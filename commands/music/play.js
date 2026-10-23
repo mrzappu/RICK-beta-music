@@ -38,22 +38,24 @@ const spotifyApi = new SpotifyWebApi({
     clientSecret: config.spotifyClientSecret,
 });
 
-async function waitForPlayerConnection(player, timeoutMs = 7000) {
+async function waitForPlayerConnection(player, timeoutMs = 8000) {
     if (!player) return false;
-    if (player.connection && typeof player.connection.resolve === 'function') {
-        try {
-            await player.connection.resolve();
-            return true;
-        } catch (_) {}
-    }
     const startedAt = Date.now();
     while (Date.now() - startedAt < timeoutMs) {
-        if (player.connected || player.connection?.isReady || player.connection?.voice?.sessionId) {
+        if (player.connected || (player.connection && player.connection.isReady)) {
+            player.connected = true;
             return true;
         }
         await new Promise((resolve) => setTimeout(resolve, 150));
     }
-    return true;
+    if (player.connection && typeof player.connection.resolve === 'function') {
+        try {
+            await player.connection.resolve();
+            player.connected = true;
+            return true;
+        } catch (_) {}
+    }
+    return player.connected || false;
 }
 
 async function getSpotifyPlaylistTracks(playlistId) {
@@ -384,9 +386,23 @@ module.exports = {
             }
 
             if (!player.playing && !player.paused) {
-                await player.play().catch((err) => {
-                    console.error('[ PLAYER ] Error in player.play():', err?.message || err);
-                });
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                    try {
+                        if (player.connection && player.connection.isReady) {
+                            player.connected = true;
+                        }
+                        await player.play();
+                        break;
+                    } catch (playErr) {
+                        const msg = playErr?.message || '';
+                        if (attempt < 3 && (msg.includes('connection is not initiated') || msg.includes('resolve') || msg.includes('timed out'))) {
+                            await new Promise(r => setTimeout(r, 800));
+                            continue;
+                        }
+                        console.error('[ PLAYER ] Error in player.play():', msg || playErr);
+                        break;
+                    }
+                }
             }
 
             const successTitle = isPlaylist ? t.success.titlePlaylist : t.success.titleTrack;

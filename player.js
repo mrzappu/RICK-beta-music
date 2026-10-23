@@ -20,6 +20,25 @@ if (Player && !Player.prototype.restart) {
         }
     };
 }
+
+// Ensure Player.prototype.play recognizes isReady connection state and avoids premature connection errors
+if (Player && Player.prototype.play) {
+    const originalPlay = Player.prototype.play;
+    Player.prototype.play = async function() {
+        if (this.connection && this.connection.isReady) {
+            this.connected = true;
+        }
+        try {
+            return await originalPlay.apply(this, arguments);
+        } catch (err) {
+            if (err?.message?.includes("Player connection is not initiated") && this.connection && this.connection.isReady) {
+                this.connected = true;
+                return await originalPlay.apply(this, arguments);
+            }
+            throw err;
+        }
+    };
+}
 const { ContainerBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, PermissionsBitField, MessageFlags, MediaGalleryBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, StringSelectMenuBuilder } = require("discord.js");
 const { requesters } = require("./commands/music/play");
 const { EnhancedMusicCard } = require("./utils/musicCard");
